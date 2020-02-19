@@ -1,0 +1,36 @@
+language: php
+
+os: linux
+
+services:
+  - mysql
+
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+
+addons:
+    code_climate:
+        repo_token: bb9681de04daca830a87c3eb0f6500b0a815f8262107fec833e0852df2401466
+
+env:
+    - APP_ENV=testing DB_CONNECTION=mysql DB_DATABASE=travis_db DB_USERNAME=travis DB_PASSWORD= CACHE_DRIVER=array SESSION_DRIVER=array QUEUE_DRIVER=sync
+
+# cache vendor dirs
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+install:
+  - COMPOSER_DISCARD_CHANGES=1 composer install --prefer-source --no-interaction
+
+#before_script:
+#  - mysql -e 'create database microblog_test;'
+
+script:
+  - vendor/bin/phpunit
+
+after_script:
+  - vendor/bin/test-reporter
