@@ -22,5 +22,11 @@ class UsersTableSeeder extends Seeder
         ]);
 
         factory(App\User::class, 9)->create();
+
+        App\User::where('id', 1)->first()->assignRole('super-admin');
+
+        foreach (App\User::all() as $user) {
+            $user->assignRole('web author');
+        }
     }
 }

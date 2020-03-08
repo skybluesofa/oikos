@@ -8,23 +8,25 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0",
+        "php": "^7.2",
         "barryvdh/laravel-dompdf": "^0.8.0@dev",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "5.8.*",
-        "laravel/passport": "^7.5",
-        "laravel/tinker": "^1.0",
-        "skybluesofa/laravel-followers": "^1.0",
-        "skybluesofa/laravel-microblog": "dev-master"
+        "laravel/framework": "^6.2",
+        "laravel/passport": "^8.4",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^1.1",
+        "laravelcollective/html": "^6.1",
+        "skybluesofa/laravel-followers": "dev-master",
+        "skybluesofa/laravel-microblog": "dev-master",
+        "spatie/laravel-permission": "^3.0",
+        "skybluesofa/image-barbershop": "dev-master "
     },
     "require-dev": {
-        "beyondcode/laravel-dump-server": "^1.0",
-        "filp/whoops": "^2.0",
+        "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.4",
-        "laravel/ui": "^1.1",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.3 || ^9.0"
+        "phpunit/phpunit": "^8.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -51,7 +53,7 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": false,
+    "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -66,12 +68,33 @@
     },
     "repositories": [
         {
-          "type": "vcs",
-          "url": "https://github.com/skybluesofa/laravel-microblog"
+            "type": "path",
+            "url": ".vendor/skybluesofa/laravel-followers",
+            "options": {
+                "symlink": true
+            }
         },
         {
             "type": "vcs",
             "url": "https://github.com/skybluesofa/laravel-followers"
-          }
-      ]
+        },
+        {
+            "type": "path",
+            "url": ".vendor/skybluesofa/laravel-microblog",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/skybluesofa/laravel-microblog"
+        },
+        {
+            "type": "path",
+            "url": ".vendor/skybluesofa/image-barbershop",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

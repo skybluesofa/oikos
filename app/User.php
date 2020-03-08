@@ -1,16 +1,20 @@
 <?php
+
 namespace App;
 
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 use Skybluesofa\Followers\Traits\Followable;
+use Spatie\Permission\Traits\HasRoles;
+use Skybluesofa\Microblog\Model\User as MicroblogUser;
 
-class User extends Authenticatable
+class User extends MicroblogUser
 {
-    use HasApiTokens;
     use Notifiable;
+    use HasApiTokens;
     use Followable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.

@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+
+  # The Application files
+  oikos_app:
+    container_name: oikos_application
+    build:
+      context: ./
+      dockerfile: docker/oikos_app/Dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - oikos-network      
+    environment:
+      DB_PORT: 3306
+      DB_HOST: oikos_database
+
+  # The Web Server
+  oikos_nginx:
+    container_name: oikos_webserver
+    build:
+      context: ./
+      dockerfile: docker/oikos_nginx/Dockerfile
+    working_dir: /var/www
+    ports:
+      - 8080:80
+    networks:
+      - oikos-network      
+  
+  # The Database Server 
+  oikos_mysql:
+    container_name: oikos_database
+    image: mysql:5.7
+    volumes:
+      - oikos_db_data:/var/lib/mysql
+    command:
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
+    networks:
+      - oikos-network      
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "33091:3306"
+  
+  # The Cache Server
+  oikos_redis:
+    container_name: oikos_cache
+    image: redis:3.2.4
+    ports:
+      - 64891:6379
+    networks:
+      - oikos-network      
+  
+volumes:
+  oikos_db_data:
+
+networks:
+  oikos-network:
+    driver: bridge

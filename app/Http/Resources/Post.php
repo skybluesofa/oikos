@@ -26,9 +26,10 @@ class Post extends JsonResource
         return [
             'journal' => $this->journal_id,
             'post' => $this->id,
-            'user' => 'John Doe',
+            'user' => $this->userName(),
             'title' => $this->title,
             'content' => $this->content,
+            'images' => $this->images,
             'visibility' => $visibilities[$this->visibility],
             'status' => $statuses[$this->status],
             'available_on' => $this->available_on,

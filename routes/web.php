@@ -7,6 +7,7 @@ use App\Journal;
 use Skybluesofa\Microblog\Model\Scope\Post\PrivacyScope as PostPrivacyScope;
 use Skybluesofa\Microblog\Model\Scope\Post\PublicScope as PostPublicScope;
 use Skybluesofa\Microblog\Model\Scope\Journal\PrivacyScope as JournalPrivacyScope;
+use Skybluesofa\ImageBarbershop\Trim;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,27 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/crop', function (Request $request) {
+    $filename = 'health-52e8d34242_1280';
+    $filepath = __DIR__ . '/../storage/app/public/' . $filename . '.jpg';
+
+    $croppedImage = Trim::makeCut()->on($filepath)->toSize(750, 300)->getResults();
+    $croppedImage->writeimage(__DIR__ . '/../storage/app/public/' . $filename . '.cropped.jpg');
+});
+
+Route::get('/stream', function (Request $request) {
+    $apiToken = '8sO50USaBQyeNudrrvoIkQ8bLZFl58eJvyOaEqhUYA5BuM7YDToUMoE5tWC1TV95gxrdAETAJOaQp8PZ';
+
+    $uri = '/api/stream?api_token=' . $apiToken;
+    $request = Request::create($uri, 'GET');
+    $response = app()->handle($request);
+
+    return $response;
+
+    return view('stream', ['entries' => $response->getData()->data]);
+});
 
 Route::prefix('publishing')->group(function () {
     $apiToken = '8sO50USaBQyeNudrrvoIkQ8bLZFl58eJvyOaEqhUYA5BuM7YDToUMoE5tWC1TV95gxrdAETAJOaQp8PZ';
@@ -68,3 +89,7 @@ Route::prefix('publishing')->group(function () {
         return $pdf->stream();
     });
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -10,6 +10,7 @@ use Skybluesofa\Microblog\Model\Scope\Journal\PrivacyScope as JournalPrivacyScop
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\Journal as JournalResource;
 use App\Http\Resources\PostCollection as PostResourceCollection;
+use Webpatser\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,22 @@ Route::group(['middleware' => ['auth:api']], function () {
             Post::where('user_id', $currentUser->id)
                 ->get()
         );
+    });
+
+    Route::get('/stream/{lastPostUuid?}', function (Request $request, $lastPostId = null) {
+        $currentUser = $request->user();
+
+        if (!$currentUser) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if (empty($lastPostId)) {
+            $posts = Post::with(['images'])->get();
+        } else {
+            $lastPostUuid = Uuid::import($lastPostId);
+            $posts = Post::whereOlderThanPost($lastPostUuid)->with(['images'])->get();
+        }
+        return new PostResourceCollection($posts);
     });
 
     Route::get('/journal/{journal}/user', function (Request $request, $journalId) {
